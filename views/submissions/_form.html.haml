@@ -1,0 +1,17 @@
+= simple_form_for(@submission, html: {:multipart => true}) do |f|
+  = f.error_notification
+
+  .form-inputs
+    - if current_user
+      = f.hidden_field :user_id, value: current_user.id
+    = f.label 'Mesh'
+    = f.file_field :image
+    %b IMPORTANT: mesh must be in *.obj file format.
+    = f.input :name
+    -#= f.input :rating
+    = f.input :orientation
+    = f.input :description
+    =# f.input :apis, :collection => @submission.apis, :as => :check_boxes, label: "Upload my design to the following services"
+
+  .form-actions
+    = f.button :submit, 'Send!'

@@ -1,0 +1,29 @@
+%h1 My Submissions
+
+%table.table.table-bordered.table-striped
+  %thead
+    %tr
+      %th ID
+      %th Name
+      %th Job Status
+      %th Job ID
+      %th Job Billing
+      %th
+      %th
+      %th
+
+  %tbody
+    - @submissions.each do |submission|
+      %tr
+        %td= submission.id
+        %td= submission.name
+        %td= submission.job_status
+        %td= submission.job_id
+        %td= submission.job_bill
+        %td= link_to 'Show', submission
+        %td= link_to 'Edit', edit_submission_path(submission)
+        %td= link_to 'Destroy', submission, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Submission', new_submission_path

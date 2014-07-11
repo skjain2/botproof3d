@@ -1,0 +1,99 @@
+
+- before_url = before_url_helper
+- after_url = after_url_helper
+- #before_url = AWS::S3::S3Object.url_for("#{image_stl}", "botproof3d/#{@submission.id}/src", use_ssl: true)
+- #after_url = AWS::S3::S3Object.url_for("#{image_stl}", "botproof3d/#{@submission.id}/fixed", use_ssl: true)
+:javascript 
+  window.onload = function() { 
+    x=#{before_loader}; 
+    y=#{after_loader}; 
+    if("#{@submission.job_status}" === 'complete') {
+      $("#sub_result").show()
+      $("#sub_status").hide()
+    }
+    else {
+      $("#sub_result").hide()
+      $("#sub_status").show()
+    };
+  };
+
+%div#sub_status
+  =@submission.job_status
+%div#sub_result
+  %p#notice= notice
+
+  %p
+    - if @submission.user_id
+      %b User:
+    = @submission.user.name
+  %p
+    %b Name:
+    = @submission.name
+  =#%p
+  =#  %b Rating:
+  =#  = @submission.rating
+  =#%p
+  =#  %b Orientation:
+  =#  = @submission.orientation
+  %p
+    %b Description:
+    = @submission.description
+
+  - height = 400
+  - width = 400
+
+
+  %div.row
+    %div.span5
+      %p.text-center
+        =#%b Original Mesh:
+      = #javascript_include_tag "https://embed.github.com/view/3d/weblaws/botproof/master/meshes/#{@submission.id}/#{@submission.image.to_s.split('/').last}.stl?height=#{height}&width=#{width}"
+      = #link_to "Download Original Mesh", @submission.image.to_s
+      //%div{:id="before", :height=>height, :width=>width}
+      #before{:style => "height:#{height}px;width:#{width}px;"}
+      =link_to "Download Original Mesh", before_url
+
+
+
+    %div.span5.offset2
+      %p.text-center
+        =#%b Repaired Mesh:
+      = #javascript_include_tag "https://embed.github.com/view/3d/weblaws/botproof/master/meshes/#{@submission.id}/#{@submission.image.to_s.split('/').last}_repaired.stl?height=#{height}&width=#{width}"
+      = #link_to "Download Repaired Mesh", ("/assets/meshes/" + @submission.repair_image.split("/meshes/").last)
+      //%div{:id="after", :height=>height, :width=>width}
+      #after{:style => "height:#{height}px;width:#{width}px;"}
+      =link_to "Download Fixed Mesh", after_url
+
+  %br
+  %br
+
+
+  %h5
+    =#Services uploaded to:
+    =#%ul.unstyled
+    =#  %li
+    =#    = image_tag "https://www.google.com/s2/favicons?domain=github.com"
+    =#    Github
+    =#  %li
+    =#    = image_tag "https://www.google.com/s2/favicons?domain=thingiverse.com"
+    =#    Thingiverse
+    =#  %li
+    =#    = image_tag "https://www.google.com/s2/favicons?domain=ponoko.com"
+    =#    Ponoko
+    =#  %li
+    =#    = image_tag "https://www.google.com/s2/favicons?domain=shapeways.com"
+    =#    Shapeways
+
+  %h5
+    Algorithms applied:
+  %ul
+    %li.text-success Close holes
+    %li.muted Remove duplicated faces
+    %li.muted Remove duplicated vertex
+    %li.muted Remove Zero Area faces
+    %li.muted Select non-manifold edges -> Remove
+    %li.muted Select non-manifold vertices -> Remove
+    %li.muted Remove unreferenced vertex
+    %li.muted Remove Isolated Pieces
+    %li.muted Select faces with edges longer than a value
+    %li.muted Select border faces

@@ -1,0 +1,31 @@
+/ Main component for a primary marketing message or call to action
+- before_url = asset_path("hand_broken.stl")
+- after_url = asset_path("hand_fixed.stl")
+- before_image = asset_path("hand_broken.png")
+- after_image = asset_path("hand_fixed.png")
+:javascript 
+  window.onload = function() { x = _stl("before").init("#{before_url}", 0xff0000); y = _stl("after").init("#{after_url}", 0x00ff00); };
+.jumbotron
+  %h1 3D Print Reliably
+  %p
+    %strong BotProof prepares 3D models for printing in one simple step.
+    
+  %div{:style => "margin: auto auto; text-align:center"}
+    %p
+      %a.btn.btn-lg.btn-primary{:href => "/submissions/new", :role => "button"} Add yours &raquo;
+    %br/
+    - height = 300
+    - width = 500
+    %div.row
+      %div.span5
+        %p.text-center
+          %b Original Mesh:
+        =# javascript_include_tag "https://embed.github.com/view/3d/weblaws/botproof/master/meshes/81/hand_broken.obj.stl?height=#{height}&width=#{width}"
+        #before{:style => "height:#{height}px;width:#{width}px;background-image:url('#{before_image}');"}
+
+      %div.span5.offset2
+        %p.text-center
+          %b Repaired Mesh:
+        =# javascript_include_tag "https://embed.github.com/view/3d/weblaws/botproof/master/meshes/81/hand_broken.obj_repaired.stl?height=#{height}&width=#{width}"
+        #after{:style => "height:#{height}px;width:#{width}px;background-image:url('#{after_image}');"}
+
